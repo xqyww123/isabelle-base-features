@@ -1,0 +1,10 @@
+feature: Isabelle2025-2/future_assign_interrupt
+release_tag: Isabelle2025-2/future_assign_interrupt/1
+commit: 6d8be012750564db449c3394528f7d1f6a2a737f
+base_tag: Isabelle2025-2/expose_foreign/1
+base_commit: f8d760a3d9443020eee39c099165d14af7623948
+base_package_version: 1
+base_pin: ==1=Isabelle2025_2_*
+build_string_prefix: Isabelle2025_2
+tree_hash: d585f005a0eeeaf091115661d287976f438a832d
+tree_hash_excludes: .gitignore Isabelle.options etc/ISABELLE_ID etc/ISABELLE_TAGS etc/components lib/scripts/Isabelle_app
