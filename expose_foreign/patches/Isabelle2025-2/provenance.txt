@@ -1,0 +1,10 @@
+feature: Isabelle2025-2/expose_foreign
+release_tag: Isabelle2025-2/expose_foreign/1
+commit: f8d760a3d9443020eee39c099165d14af7623948
+base_tag: Isabelle2025-2/pristine/89701cf1768e
+base_commit: 1113ce6b3fce463361116ae31df4b6d54002869d
+base_package_version: none (the base is pristine)
+base_pin: none
+build_string_prefix: Isabelle2025_2
+tree_hash: 9bf9c4f8f2cf46c63d33af56ce0a65d744c3fe1a
+tree_hash_excludes: .gitignore Isabelle.options etc/ISABELLE_ID etc/ISABELLE_TAGS etc/components lib/scripts/Isabelle_app
