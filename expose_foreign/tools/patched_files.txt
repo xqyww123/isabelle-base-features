@@ -1,0 +1,2 @@
+# Every path expose_foreign changes, relative to the Isabelle tree (make-patches gate (f)).
+src/Pure/ML/ml_name_space.ML

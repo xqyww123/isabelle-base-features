@@ -1,0 +1,2 @@
+# Every signature entry expose_foreign adds to an .ML file, as `<path> <SIGNATURE NAME> <keyword> <name>`
+# (make-patches gate (d), check-signatures): none.

@@ -1,0 +1,2 @@
+# The sessions a tested build of expose_foreign must have covered (make-patches gate (e)).
+Pure

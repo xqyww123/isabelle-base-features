@@ -1,0 +1,2 @@
+# Every path future_assign_interrupt changes, relative to the Isabelle tree (make-patches gate (f)).
+src/Pure/Concurrent/future.ML

@@ -1,0 +1,2 @@
+# Every signature entry future_assign_interrupt adds to an .ML file, as `<path> <SIGNATURE NAME> <keyword> <name>`
+# (make-patches gate (d), check-signatures): none.
