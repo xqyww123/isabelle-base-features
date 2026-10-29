@@ -50,13 +50,18 @@ fun compare ctxt modes terms =
           val stock = accepted t (maps (fn net => Item_Net.retrieve net t) nets);
           val _ = visited := ! visited + 1;
           val _ = if FAP_Entries.same patched stock then () else differing := t :: ! differing;
-        in (case stock of [] => NONE | item :: _ => Option.map #1 (Pattern.match_rew thy t item)) end;
+        in
+          (case stock of [] => NONE | item :: _ => Option.map #1 (Pattern.match_rew thy t item))
+        end;
       val _ = List.app (ignore o contract ctxt match_abbrev) terms;
     in (! visited, rev (! differing)) end) ();
 
 fun check_corpora thy =
   FAP_Entries.corpora thy |> List.app (fn (label, corpus) =>
-    let val (visited, differing) = compare (FAP_Entries.context_of corpus) (#modes corpus) (#terms corpus) in
+    let
+      val (visited, differing) =
+        compare (FAP_Entries.context_of corpus) (#modes corpus) (#terms corpus);
+    in
       if null differing then
         writeln ("candidates " ^ label ^ ": " ^ string_of_int visited ^ " objects agree")
       else

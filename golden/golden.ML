@@ -56,7 +56,8 @@ fun check thy name text =
   end;
 
 fun indexed (name, [th]) = [(name, th)]
-  | indexed (name, ths) = map_index (fn (i, th) => (name ^ "(" ^ string_of_int (i + 1) ^ ")", th)) ths;
+  | indexed (name, ths) =
+      map_index (fn (i, th) => (name ^ "(" ^ string_of_int (i + 1) ^ ")", th)) ths;
 
 (*every fact first stated in an ancestor theory whose long name has the prefix, by theory then by
   name.  Ancestors, not Thy_Info: theories loaded in the running session are not registered there

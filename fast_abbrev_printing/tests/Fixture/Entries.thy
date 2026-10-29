@@ -7,7 +7,7 @@ text \<open>The entries of the golden files, in stock API only, so that they rec
   \<^item> a term entry: an object printed under given print modes, with the SHA1 of the printed text,
     of the term \<^ML>\<open>Proof_Context.contract_abbrevs\<close> returns and of the term
     \<^ML>\<open>Syntax.uncheck_terms\<close> hands to unparse;
-  \<^item> content entries: the reverse abbreviations of each listed mode, in content order;
+  \<^item> content entries: the reverted abbreviations of each listed mode, in content order;
   \<^item> retrieval entries: the content positions of the items that stock unification and matching
     retrieval return at a probe object.
 
@@ -26,7 +26,7 @@ fun digest s = SHA1.rep (SHA1.digest s);
 val term_digest = digest o ML_Syntax.print_term;
 val one_line = translate_string (fn "\n" => " " | c => c);
 
-(*the equality of the reverse abbreviations (consts.ML)*)
+(*the equality of the reverted abbreviations (consts.ML)*)
 fun eq_item ((t, u), (t', u')) = t aconv t' andalso u aconv u';
 fun same xs ys = length xs = length ys andalso forall eq_item (xs ~~ ys);
 
@@ -66,7 +66,8 @@ fun content_entries label ctxt modes =
   Print_Mode.setmp modes (fn () =>
     listed_modes () |> maps (fn m =>
       let val items = (case container ctxt m of SOME net => Item_Net.content net | NONE => []) in
-        ("# content " ^ label ^ " mode=" ^ show_mode m ^ " count=" ^ string_of_int (length items)) ::
+        ("# content " ^ label ^ " mode=" ^ show_mode m ^
+          " count=" ^ string_of_int (length items)) ::
           map_index (fn (i, (pat, lhs)) =>
             string_of_int i ^ "  " ^ term_digest pat ^ "  " ^ term_digest lhs) items
       end)) ();

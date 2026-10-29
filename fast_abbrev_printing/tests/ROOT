@@ -44,7 +44,7 @@ session Fast_Abbrev_Printing_Fixture_Check in "Fixture_Check" = Fast_Abbrev_Prin
 
 session Fast_Abbrev_Printing_Golden_Check in "Breadth_Check" = Fast_Abbrev_Printing_Golden +
   description "
-    Checks of the patch's own code on HOL-Algebra's contexts: the replay of the reverse
+    Checks of the patch's own code on HOL-Algebra's contexts: the replay of the reverted
     abbreviations against the stock Item_Net and the candidate lists.
   "
   sessions

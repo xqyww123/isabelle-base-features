@@ -1,0 +1,8 @@
+# The sessions a tested build of fast_abbrev_printing must have covered (make-patches gate (e)).
+Pure
+HOL
+HOL-Algebra
+Fast_Abbrev_Printing_Fixture
+Fast_Abbrev_Printing_Golden
+Fast_Abbrev_Printing_Fixture_Check
+Fast_Abbrev_Printing_Golden_Check

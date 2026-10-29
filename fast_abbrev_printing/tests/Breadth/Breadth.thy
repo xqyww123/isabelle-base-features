@@ -21,7 +21,8 @@ val print_modes = [[], ["iff"]];
 
 val locales =
   ["Group.monoid", "Group.group", "Group.comm_group", "Ring.abelian_monoid", "Ring.ring",
-   "UnivPoly.UP_pre_univ_prop", "Orderings.linorder", "Lattices.lattice", "Fields.linordered_field"];
+   "UnivPoly.UP_pre_univ_prop", "Orderings.linorder", "Lattices.lattice",
+   "Fields.linordered_field"];
 
 fun fact_lines ctxt (name, th) =
   print_modes |> map (fn modes =>
@@ -39,7 +40,8 @@ fun contexts thy =
   map (fn loc =>
     (loc, thy, loc, local_facts thy (Named_Target.init [] loc thy))) locales;
 
-fun context_of thy loc = if loc = "" then Proof_Context.init_global thy else Named_Target.init [] loc thy;
+fun context_of thy loc =
+  if loc = "" then Proof_Context.init_global thy else Named_Target.init [] loc thy;
 
 fun register thy =
   fold (fn (label, thy', loc, facts) =>

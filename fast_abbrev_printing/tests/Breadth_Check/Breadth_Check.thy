@@ -4,7 +4,7 @@ theory Breadth_Check
     Fast_Abbrev_Printing_Fixture_Check.INet_Regression Fast_Abbrev_Printing_Fixture_Check.Candidates
 begin
 
-text \<open>The replay: the reverse abbreviations of the last theory and of each locale and class
+text \<open>The replay: the reverted abbreviations of the last theory and of each locale and class
   context, every listed mode with a container, through the histories of the container on an
   \<^ML_type>\<open>'a Item_iNet.T\<close> against the stock \<^ML_type>\<open>'a Item_Net.T\<close>.  Then the candidate
   lists on every corpus of the breadth session.\<close>

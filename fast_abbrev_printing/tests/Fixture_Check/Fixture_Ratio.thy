@@ -20,7 +20,7 @@ fun pattern f = Logic.all_const nT $ Abs ("x", nT, f $ Bound 0 $ Bound 0);
 end;
 \<close>
 
-text \<open>Declared at theory level: \<^ML>\<open>Sign.add_abbrev\<close> registers the reverse abbreviation, and
+text \<open>Declared at theory level: \<^ML>\<open>Sign.add_abbrev\<close> registers the reverted abbreviation, and
   no local-theory transfer merges the containers after each declaration.\<close>
 
 setup \<open>
@@ -48,7 +48,8 @@ let
   fun clock f =
     let
       val _ = f ();
-      val ts = map (fn _ => let val t0 = Time.now (); val _ = f () in Time.now () - t0 end) (1 upto 5);
+      val ts =
+        map (fn _ => let val t0 = Time.now (); val _ = f () in Time.now () - t0 end) (1 upto 5);
     in Time.toReal (hd (sort Time.compare ts)) end;
   val stock = FAP_Candidates.stock_procedure ctxt;
   val stock_terms = map (FAP_Candidates.contract ctxt stock) objects;
@@ -63,7 +64,10 @@ let
     "ratio: stock route " ^ Real.fmt (StringCvt.FIX (SOME 2)) (t_stock * 1000.0) ^ " ms, patched " ^
     Real.fmt (StringCvt.FIX (SOME 2)) (t_patched * 1000.0) ^ " ms, " ^
     Real.fmt (StringCvt.FIX (SOME 1)) ratio ^ " times";
-in if ratio >= ratio_min then writeln msg else error (msg ^ ", below " ^ Real.toString ratio_min) end
+in
+  if ratio >= ratio_min then writeln msg
+  else error (msg ^ ", below " ^ Real.toString ratio_min)
+end
 \<close>
 
 end

@@ -1,0 +1,6 @@
+# Every path fast_abbrev_printing changes, relative to the Isabelle tree (make-patches gate (f)).
+src/Pure/Isar/proof_context.ML
+src/Pure/ROOT.ML
+src/Pure/consts.ML
+src/Pure/improved_net.ML
+src/Pure/item_net.ML

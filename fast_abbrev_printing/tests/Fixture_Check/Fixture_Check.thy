@@ -39,14 +39,17 @@ let
   val probe = \<^term>\<open>\<And>x::n. PROP f_1 x x\<close>;
   fun heads items = map (fn (_, lhs) => (case head_of lhs of Const (c, _) => c | _ => "")) items;
   val patched = heads (Consts.retrieve_abbrevs consts [""] probe);
-  val stock = heads (maps (fn net => Item_Net.retrieve net probe) (Consts.revert_abbrevs consts [""]));
+  val stock =
+    heads (maps (fn net => Item_Net.retrieve net probe) (Consts.revert_abbrevs consts [""]));
   val (p1, p2, p3) = (\<^const_abbrev>\<open>p_1\<close>, \<^const_abbrev>\<open>p_2\<close>, \<^const_abbrev>\<open>p_3\<close>);
 in
   if not (forall (member (op =) stock) [p1, p2, p3]) then
     error "discrimination: stock retrieval does not return all three lambda patterns"
   else if member (op =) patched p1 andalso not (exists (member (op =) patched) [p2, p3]) then
     writeln "discrimination: pass"
-  else error ("discrimination: retrieve_abbrevs returns " ^ commas (filter (member (op =) [p1, p2, p3]) patched))
+  else
+    error ("discrimination: retrieve_abbrevs returns " ^
+      commas (filter (member (op =) [p1, p2, p3]) patched))
 end
 \<close>
 

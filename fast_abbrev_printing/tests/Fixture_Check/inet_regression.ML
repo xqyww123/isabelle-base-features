@@ -1,6 +1,6 @@
 (*  Regression cases for an implementation of INET, and the replay that runs an Item_Net built on
-    it through the histories of the reverse-abbreviation container against the stock Item_Net on
-    Net.  A case returns its failure message; a non-interrupt exception is a failure.
+    it through the histories of the container of reverted abbreviations against the stock
+    Item_Net on Net.  A case returns its failure message; a non-interrupt exception is a failure.
 *)
 
 signature INET_REGRESSION =
@@ -47,9 +47,11 @@ fun replay eq index items =
       ("removal", fn () =>
         (fold Item_Net.remove re (build_S items), fold Items.remove re (build_N items))),
       ("merge", fn () =>
-        (Item_Net.merge (build_S older, build_S newer), Items.merge (build_N older, build_N newer))),
+        (Item_Net.merge (build_S older, build_S newer),
+          Items.merge (build_N older, build_N newer))),
       ("merge reversed", fn () =>
-        (Item_Net.merge (build_S newer, build_S older), Items.merge (build_N newer, build_N older)))];
+        (Item_Net.merge (build_S newer, build_S older),
+          Items.merge (build_N newer, build_N older)))];
     fun check (name, history) =
       guarded ("replay, " ^ name) (fn () =>
         let
@@ -89,7 +91,8 @@ val retrieved =
     c "g" (nT --> nT --> nT) $ c "d" nT),
   ("raw insert",
     Abs ("x", nT,
-      c "g" (nT --> nT --> nT) $ (Abs ("y", nT, c "z" nT) $ Bound 0) $ (v "F" (nT --> nT) $ Bound 0)),
+      c "g" (nT --> nT --> nT) $ (Abs ("y", nT, c "z" nT) $ Bound 0) $
+        (v "F" (nT --> nT) $ Bound 0)),
     c "g" (nT --> nT --> nT) $ c "z" nT),
   ("TYPE, schematic",
     c "tf" (Term.itselfT nT --> lstT nT --> nT) $ itself (TVar (("'a", 0), [])) $
@@ -125,13 +128,14 @@ fun deletion_cases () =
   guarded "deletion" (fn () =>
     let
       val pats = map #2 retrieved;
-      val net = fold (fn (i, t) => N.insert_term eq_string (t, string_of_int i)) (map_index I pats) N.empty;
+      val net =
+        fold (fn (i, t) => N.insert_term eq_string (t, string_of_int i)) (map_index I pats) N.empty;
       val net' = N.delete_term eq_string (hd pats, "0") net;
       val remaining = fold (fn (i, t) => N.delete_term eq_string (t, string_of_int i))
         (tl (map_index I pats)) net';
     in
-      (if member eq_string (N.match_term net' (#3 (hd retrieved))) "0" then ["deleted item retrieved"]
-       else []) @
+      (if member eq_string (N.match_term net' (#3 (hd retrieved))) "0"
+       then ["deleted item retrieved"] else []) @
       (if member eq_string (N.match_term net' (#3 (nth retrieved 1))) "1" then []
        else ["other item lost"]) @
       (if N.is_empty remaining then [] else ["not empty after deleting everything"])
