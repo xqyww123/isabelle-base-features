@@ -1,0 +1,10 @@
+feature: Isabelle2025-2/fast_abbrev_printing
+release_tag: Isabelle2025-2/fast_abbrev_printing/1
+commit: aeda54f7118ffc596b9d71ad6787495f276c8b46
+base_tag: Isabelle2025-2/future_assign_interrupt/1
+base_commit: 6d8be012750564db449c3394528f7d1f6a2a737f
+base_package_version: 1
+base_pin: ==1 Isabelle2025_2_*
+build_string_prefix: Isabelle2025_2
+tree_hash: 3e22c4de4666f3e69d43850116069a0ec248b704
+tree_hash_excludes: .gitignore Isabelle.options etc/ISABELLE_ID etc/ISABELLE_TAGS etc/components lib/scripts/Isabelle_app

@@ -1,0 +1,15 @@
+diff --git a/src/Pure/ROOT.ML b/src/Pure/ROOT.ML
+index 286fb6f..3ebe1bf 100644
+--- a/src/Pure/ROOT.ML
++++ b/src/Pure/ROOT.ML
+@@ -168,8 +168,9 @@ ML_file "type.ML";
+ ML_file "logic.ML";
+ ML_file "Syntax/simple_syntax.ML";
+ ML_file "net.ML";
+-ML_file "item_net.ML";
+ ML_file "envir.ML";
++ML_file "improved_net.ML";
++ML_file "item_net.ML";
+ ML_file "consts.ML";
+ ML_file "primitive_defs.ML";
+ ML_file "sign.ML";
