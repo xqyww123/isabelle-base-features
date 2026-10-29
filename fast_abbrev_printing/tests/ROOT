@@ -1,0 +1,53 @@
+(* The tests of fast_abbrev_printing: build them with an extra "-d" for this directory and one for
+   contrib/isabelle-base-features/golden.  The two golden sessions use stock API only, record on
+   the stock tree and compare elsewhere; the two check sessions name the patch's own code and
+   build on the patched tree only.  Each session has its own directory. *)
+
+session Fast_Abbrev_Printing_Fixture in "Fixture" = Golden_Harness +
+  description "
+    Golden entries for small Pure contexts built so that each shape the patch must keep is
+    printed: eta-unstable and front-rigid patterns, TYPE, lambda-abstractions, an eta-expanded
+    object, objects whose result depends on the order of candidates.
+  "
+  theories
+    Entries
+    Fixture_Base
+    Fixture_Basic
+    Fixture_Lambda
+    Fixture_Order
+    Fixture_Merge_Base
+    Fixture_Merge_A
+    Fixture_Merge_B
+    Fixture_Merge
+
+session Fast_Abbrev_Printing_Golden in "Breadth" = "HOL-Algebra" +
+  description "
+    Golden entries for every named fact of HOL-Algebra, in its theories' contexts and in locale
+    and class contexts, printed in the default print mode and in iff.
+  "
+  sessions
+    Golden_Harness
+    Fast_Abbrev_Printing_Fixture
+  theories
+    Breadth
+
+session Fast_Abbrev_Printing_Fixture_Check in "Fixture_Check" = Fast_Abbrev_Printing_Fixture +
+  description "
+    Checks of the patch's own code on the fixture: the digest of Pure's copy of iNet, iNet's
+    regression cases, the candidate lists, the discrimination and the ratio assertions.
+  "
+  theories
+    INet_Regression
+    Candidates
+    Fixture_Check
+    Fixture_Ratio
+
+session Fast_Abbrev_Printing_Golden_Check in "Breadth_Check" = Fast_Abbrev_Printing_Golden +
+  description "
+    Checks of the patch's own code on HOL-Algebra's contexts: the replay of the reverse
+    abbreviations against the stock Item_Net and the candidate lists.
+  "
+  sessions
+    Fast_Abbrev_Printing_Fixture_Check
+  theories
+    Breadth_Check

@@ -1,0 +1,10 @@
+(* The golden harness shared by the feature packages' tests: build them with an extra
+   "-d contrib/isabelle-base-features/golden".  golden.ML explains the two modes. *)
+
+session Golden_Harness = Pure +
+  description "
+    Byte-for-byte reference output: recorded on a feature's stock tree, compared on every other
+    tree.  A feature applies the functor Golden to its name.
+  "
+  theories
+    Golden_Harness

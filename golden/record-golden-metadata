@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Write <golden dir>/METADATA after a feature's golden sessions were recorded on its stock tree:
+# the tree, the commit it is detached at, its git status (must be empty), Isabelle's version there,
+# and the sha256 of every golden file.
+# Usage: record-golden-metadata <golden dir> <stock tree>
+set -euo pipefail
+[[ $# -eq 2 ]] || { echo "usage: record-golden-metadata <golden dir> <stock tree>" >&2; exit 2; }
+golden=$(cd "$1" && pwd)
+tree=$(cd "$2" && pwd)
+run_tree=$(cd "$(dirname "$0")/../.." && pwd)/my_better_isabelle_prover/tools/run-tree
+status=$(git -C "$tree" status --porcelain --untracked-files=all)
+[[ -z $status ]] || { echo "ERROR: $tree has uncommitted changes:" >&2; echo "$status" >&2; exit 1; }
+{
+  echo "recorded: $(date -Is)"
+  echo "tree: $tree (ISABELLE_IDENTIFIER=$(cat "$tree/etc/ISABELLE_IDENTIFIER"))"
+  echo "commit: $(git -C "$tree" rev-parse HEAD) ($(git -C "$tree" log -1 --format=%s))"
+  echo "git status: empty"
+  echo "isabelle: $("$run_tree" "$tree" version)"
+  echo "sha256:"
+  (cd "$golden" && sha256sum ./*.golden) | sed 's/^/  /'
+} > "$golden/METADATA"
+cat "$golden/METADATA"

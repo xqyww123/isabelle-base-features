@@ -1,0 +1,15 @@
+## Fixture_Lambda
+all  4a7f9dceda424bf04b3e7d8e10187c7dc6460b9f  4025ace237ee055afc3f052340feb900e1da155c  4025ace237ee055afc3f052340feb900e1da155c  p_1
+abs  bdc5ffb4532235ca4714dcb1bced99c319954494  576d4fe9095b2eb303c716008a3db8f018cdf388  576d4fe9095b2eb303c716008a3db8f018cdf388  \<lambda>x. f_1 x x
+eta-expanded  5e98204d7cd7565f5c931342a4a2f16ad07a72ea  80f6dc19531ec18738a4386a190ab21bbabc02c7  80f6dc19531ec18738a4386a190ab21bbabc02c7  a_eta
+eta-contracted  5e98204d7cd7565f5c931342a4a2f16ad07a72ea  80f6dc19531ec18738a4386a190ab21bbabc02c7  80f6dc19531ec18738a4386a190ab21bbabc02c7  a_eta
+# content Fixture_Lambda mode=fap_mode count=0
+# content Fixture_Lambda mode="" count=4
+0  7146794380f297e93f98ed1279f5fa92ae608991  80f6dc19531ec18738a4386a190ab21bbabc02c7
+1  3c07733059a73c4eb5d5af829b1466c35c1fc4b4  552cfaefb2b0c73490bb957fabd47c357ede3586
+2  620f0e60693e7a06a21b8293ad59738631d8cef6  b832c2b8d56fd264e68b7c624a41289f4b77b69a
+3  44079d26dc0dad706b78afed188713f91492d558  4025ace237ee055afc3f052340feb900e1da155c
+# content Fixture_Lambda mode=internal count=0
+# content Fixture_Lambda mode=input count=0
+# retrieval Fixture_Lambda mode="" probe=all  retrieve=1, 2, 3  matching=1, 2, 3
+# retrieval Fixture_Lambda mode="" probe=abs  retrieve=0, 1, 2, 3  matching=
