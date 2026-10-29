@@ -20,15 +20,12 @@ end
 \<close>
 
 ML \<open>
-structure Pure_iNet_Regression = INet_Regression(iNet);
-
-val _ =
-  (case Pure_iNet_Regression.failures () of
-    [] => writeln "iNet regression: pass"
-  | msgs => error ("iNet regression:\n" ^ cat_lines msgs));
+(case Pure_iNet_Regression.failures () of
+  [] => ()
+| msgs => error ("iNet regression:\n" ^ cat_lines msgs))
 \<close>
 
-ML \<open>FAP_Candidates.check_corpora \<^theory>\<close>
+ML \<open>FAP_Candidates.check_corpora \<^theory> "fixture_candidates.txt"\<close>
 
 text \<open>The discrimination assertion: at \<open>\<And>x. f_1 x x\<close>, \<^ML>\<open>Consts.retrieve_abbrevs\<close> tells the
   three lambda patterns apart; stock unification retrieval returns all three.\<close>
@@ -45,8 +42,7 @@ let
 in
   if not (forall (member (op =) stock) [p1, p2, p3]) then
     error "discrimination: stock retrieval does not return all three lambda patterns"
-  else if member (op =) patched p1 andalso not (exists (member (op =) patched) [p2, p3]) then
-    writeln "discrimination: pass"
+  else if member (op =) patched p1 andalso not (exists (member (op =) patched) [p2, p3]) then ()
   else
     error ("discrimination: retrieve_abbrevs returns " ^
       commas (filter (member (op =) [p1, p2, p3]) patched))

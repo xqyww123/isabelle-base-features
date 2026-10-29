@@ -1,0 +1,3 @@
+# golden.ML writes <golden dir>/<name>.actual on a mismatch; a check's results go to tests/out/
+**/golden/*.actual
+**/tests/out/

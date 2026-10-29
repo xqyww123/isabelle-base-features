@@ -10,27 +10,21 @@ text \<open>The replay: the reverted abbreviations of the last theory and of eac
   lists on every corpus of the breadth session.\<close>
 
 ML \<open>
-structure Pure_iNet_Regression = INet_Regression(iNet);
-
 let
-  val thy = \<^theory>;
-  val contexts =
-    ("Breadth", \<^context>) ::
-      map (fn loc => (loc, Named_Target.init [] loc thy)) FAP_Breadth.locales;
   val failures =
-    contexts |> maps (fn (label, ctxt) =>
-      Print_Mode.setmp ["iff"] FAP_Entries.listed_modes () |> maps (fn m =>
+    FAP_Breadth.content_contexts \<^theory> |> maps (fn (label, ctxt) =>
+      FAP_Entries.listed_modes FAP_Breadth.content_modes |> maps (fn m =>
         (case FAP_Entries.container ctxt m of
           NONE => []
         | SOME net =>
-            Pure_iNet_Regression.replay FAP_Entries.eq_item (single o #1) (Item_Net.content net)
+            Pure_iNet_Regression.replay (Item_Net.content net)
             |> map (fn msg => label ^ " mode=" ^ FAP_Entries.show_mode m ^ ": " ^ msg))));
-in
-  if null failures then writeln "replay: pass"
-  else error ("replay:\n" ^ cat_lines failures)
-end
+  val _ =
+    FAP_Entries.write_results \<^theory> "breadth_replay.txt"
+      (if null failures then ["replay: pass"] else failures);
+in if null failures then () else error ("replay:\n" ^ cat_lines failures) end
 \<close>
 
-ML \<open>FAP_Candidates.check_corpora \<^theory>\<close>
+ML \<open>FAP_Candidates.check_corpora \<^theory> "breadth_candidates.txt"\<close>
 
 end

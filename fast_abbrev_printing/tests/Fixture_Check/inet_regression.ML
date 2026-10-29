@@ -5,7 +5,7 @@
 
 signature INET_REGRESSION =
 sig
-  val replay: ('a * 'a -> bool) -> ('a -> term list) -> 'a list -> string list
+  val replay: (term * term) list -> string list
   val failures: unit -> string list
 end;
 
@@ -14,12 +14,13 @@ struct
 
 structure Items = Item_Net(N);
 
+(*the container's equality and index (consts.ML)*)
+val eq_rev_abbrev = eq_pair (op aconv) (op aconv);
+val index_rev_abbrev = single o #1;
+
 fun guarded name f =
-  (case Exn.capture f () of
-    Exn.Res msgs => map (fn msg => name ^ ": " ^ msg) msgs
-  | Exn.Exn exn =>
-      if Exn.is_interrupt exn then Exn.reraise exn
-      else [name ^ ": exception " ^ Runtime.exn_message exn]);
+  map (prefix (name ^ ": "))
+    (\<^try>\<open>f () catch exn => ["exception " ^ Runtime.exn_message exn]\<close>);
 
 
 (* replay *)
@@ -33,11 +34,11 @@ fun halves xs =
 (*after each history, content and every item's lookup equal the stock ones.  lookup asks
   unify_term with the item's own pattern and keeps the entries eq to it (member's path), so on
   correct code it gives one copy of an item in content and none otherwise, on both nets*)
-fun replay eq index items =
+fun replay items =
   let
-    fun same xs ys = length xs = length ys andalso forall eq (xs ~~ ys);
-    fun build_S xs = fold_rev Item_Net.update xs (Item_Net.init eq index);
-    fun build_N xs = fold_rev Items.update xs (Items.init eq index);
+    val same = eq_list eq_rev_abbrev;
+    fun build_S xs = fold_rev Item_Net.update xs (Item_Net.init eq_rev_abbrev index_rev_abbrev);
+    fun build_N xs = fold_rev Items.update xs (Items.init eq_rev_abbrev index_rev_abbrev);
     val re = picked items;
     val (older, newer) = halves items;
     val histories =
@@ -56,10 +57,10 @@ fun replay eq index items =
       guarded ("replay, " ^ name) (fn () =>
         let
           val (s, n) = history ();
-          val content = if same (Item_Net.content s) (Items.content n) then [] else ["content"];
+          val content = if same (Item_Net.content s, Items.content n) then [] else ["content"];
           val lookup =
             map_index I items
-            |> filter_out (fn (_, x) => same (Item_Net.lookup s x) (Items.lookup n x))
+            |> filter_out (fn (_, x) => same (Item_Net.lookup s x, Items.lookup n x))
             |> map (fn (i, _) => "lookup of item " ^ string_of_int i);
         in content @ lookup end);
   in maps check histories end;
@@ -141,12 +142,14 @@ fun deletion_cases () =
       (if N.is_empty remaining then [] else ["not empty after deleting everything"])
     end);
 
+(*a case's pattern as a reverted abbreviation, the case's name as its lhs*)
+fun pattern_items cases = map (fn (name, pat, _) => (pat, Free (name, nT))) cases;
+
 fun membership_cases () =
   guarded "membership" (fn () =>
     let
-      val eq = fn ((t, u), (t', u')) => t aconv t' andalso u aconv u';
-      val items = map (fn (name, pat, _) => (pat, Free (name, nT))) retrieved;
-      val net = fold_rev Items.update items (Items.init eq (single o #1));
+      val items = pattern_items retrieved;
+      val net = fold_rev Items.update items (Items.init eq_rev_abbrev index_rev_abbrev);
       val net' = Items.update (hd items) net;
       val net'' = Items.remove (hd items) net';
     in
@@ -157,8 +160,8 @@ fun membership_cases () =
 
 fun failures () =
   retrieval_cases () @ deletion_cases () @ membership_cases () @
-  replay (fn ((t, u), (t', u')) => t aconv t' andalso u aconv u') (single o #1)
-    (map (fn (name, pat, _) => (pat, Free (name, nT))) (retrieved @ not_retrieved) @
+  replay
+    (pattern_items (retrieved @ not_retrieved) @
      map (fn (name, _, obj) => (obj, Free (name ^ ", object", nT))) (retrieved @ not_retrieved));
 
 end;

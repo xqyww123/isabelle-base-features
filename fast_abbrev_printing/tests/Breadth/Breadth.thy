@@ -17,7 +17,11 @@ ML \<open>
 structure FAP_Breadth =
 struct
 
-val print_modes = [[], ["iff"]];
+val content_modes = ["iff"];
+val print_modes = [[], content_modes];
+
+fun mode_label [] = "default"
+  | mode_label (m :: _) = m;
 
 val locales =
   ["Group.monoid", "Group.group", "Group.comm_group", "Ring.abelian_monoid", "Ring.ring",
@@ -27,39 +31,45 @@ val locales =
 fun fact_lines ctxt (name, th) =
   print_modes |> map (fn modes =>
     FAP_Entries.term_entry {text = false} ctxt modes
-      (name ^ " @" ^ (case modes of [] => "default" | m :: _ => m), Thm.prop_of th));
+      (name ^ " @" ^ mode_label modes, Thm.prop_of th));
 
 fun local_facts thy ctxt =
-  Facts.dest_static false [Global_Theory.facts_of thy] (Proof_Context.facts_of ctxt)
-  |> sort_by #1 |> maps FAP_Golden.indexed;
+  FAP_Golden.new_facts [Global_Theory.facts_of thy] (Proof_Context.facts_of ctxt);
 
-(*label, theory, locale ("" for a theory context), facts*)
-fun contexts thy =
-  map (fn (thy', facts) => (Context.theory_long_name thy', thy', "", facts))
-    (FAP_Golden.facts_of thy "HOL-Algebra.") @
-  map (fn loc =>
-    (loc, thy, loc, local_facts thy (Named_Target.init [] loc thy))) locales;
-
-fun context_of thy loc =
-  if loc = "" then Proof_Context.init_global thy else Named_Target.init [] loc thy;
+(*the contexts whose containers the locale golden records and the replay checks: each locale and
+  class context, then the last theory's*)
+fun locale_contexts thy = map (fn loc => (loc, FAP_Entries.context_at thy loc)) locales;
+fun theory_context thy = (Context.theory_base_name thy, Proof_Context.init_global thy);
+fun content_contexts thy = locale_contexts thy @ [theory_context thy];
 
 fun register thy =
-  fold (fn (label, thy', loc, facts) =>
-    fold (fn modes =>
-      FAP_Entries.register (label ^ " @" ^ (case modes of [] => "default" | m :: _ => m))
-        {thy = Context.theory_long_name thy', loc = loc, modes = modes,
-         terms = map (Thm.prop_of o #2) facts})
-      print_modes) (contexts thy) thy;
+  let
+    val theory_corpora =
+      FAP_Golden.facts_of thy "HOL-Algebra."
+      |> map (fn (thy', facts) => (Context.theory_long_name thy', thy', "", facts));
+    val locale_corpora =
+      locale_contexts thy |> map (fn (loc, ctxt) => (loc, thy, loc, local_facts thy ctxt));
+  in
+    fold (fn (label, thy', loc, facts) =>
+      fold (fn modes =>
+        FAP_Entries.register (label ^ " @" ^ mode_label modes)
+          {thy = Context.theory_long_name thy', loc = loc, modes = modes,
+           terms = map (Thm.prop_of o #2) facts})
+        print_modes) (theory_corpora @ locale_corpora) thy
+  end;
 
-fun dump thy kind =
-  contexts thy
-  |> filter (fn (_, _, loc, _) => (kind = "locales") = (loc <> ""))
-  |> maps (fn (label, thy', loc, facts) =>
-      let val ctxt = context_of thy' loc in
-        ("## " ^ label ^ " (" ^ string_of_int (length facts) ^ " theorems)") ::
-          maps (fact_lines ctxt) facts @
-          (if kind = "locales" then FAP_Entries.content_entries label ctxt ["iff"] else [])
-      end)
+fun theories_dump thy =
+  FAP_Golden.facts_dump (fn thy' => cat_lines o fact_lines (Proof_Context.init_global thy'))
+    thy "HOL-Algebra.";
+
+fun locales_dump thy =
+  (locale_contexts thy |> maps (fn (loc, ctxt) =>
+    let val facts = local_facts thy ctxt in
+      ("## " ^ loc ^ " (" ^ string_of_int (length facts) ^ " theorems)") ::
+        maps (fact_lines ctxt) facts @ FAP_Entries.content_entries loc ctxt content_modes
+    end)) @
+  (let val (label, ctxt) = theory_context thy
+   in FAP_Entries.content_entries label ctxt content_modes end)
   |> cat_lines |> suffix "\n";
 
 end;
@@ -68,10 +78,8 @@ end;
 setup \<open>FAP_Breadth.register\<close>
 
 ML \<open>
-FAP_Golden.check \<^theory> "breadth_theories.golden" (FAP_Breadth.dump \<^theory> "theories");
-FAP_Golden.check \<^theory> "breadth_locales.golden"
-  (FAP_Breadth.dump \<^theory> "locales" ^
-    cat_lines (FAP_Entries.content_entries "Breadth" \<^context> ["iff"]) ^ "\n");
+FAP_Golden.check \<^theory> "breadth_theories.golden" (FAP_Breadth.theories_dump \<^theory>);
+FAP_Golden.check \<^theory> "breadth_locales.golden" (FAP_Breadth.locales_dump \<^theory>);
 \<close>
 
 end

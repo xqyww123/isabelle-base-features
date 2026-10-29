@@ -10,7 +10,7 @@ signature GOLDEN =
 sig
   val recording: bool
   val check: theory -> string -> string -> unit
-  val indexed: string * thm list -> (string * thm) list
+  val new_facts: Facts.T list -> Facts.T -> (string * thm) list
   val facts_of: theory -> string -> (theory * (string * thm) list) list
   val facts_dump: (theory -> string * thm -> string) -> theory -> string -> string
 end;
@@ -59,6 +59,9 @@ fun indexed (name, [th]) = [(name, th)]
   | indexed (name, ths) =
       map_index (fn (i, th) => (name ^ "(" ^ string_of_int (i + 1) ^ ")", th)) ths;
 
+(*the facts not in any of prev, by name, one entry per theorem*)
+fun new_facts prev facts = Facts.dest_static false prev facts |> sort_by #1 |> maps indexed;
+
 (*every fact first stated in an ancestor theory whose long name has the prefix, by theory then by
   name.  Ancestors, not Thy_Info: theories loaded in the running session are not registered there
   yet*)
@@ -68,9 +71,8 @@ fun facts_of thy prefix =
   |> sort (string_ord o apply2 Context.theory_long_name)
   |> map (fn thy' =>
       (thy',
-        Facts.dest_static false (map Global_Theory.facts_of (Theory.parents_of thy'))
-          (Global_Theory.facts_of thy')
-        |> sort_by #1 |> maps indexed));
+        new_facts (map Global_Theory.facts_of (Theory.parents_of thy'))
+          (Global_Theory.facts_of thy')));
 
 fun facts_dump entry thy prefix =
   facts_of thy prefix

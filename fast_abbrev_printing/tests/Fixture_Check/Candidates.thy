@@ -49,26 +49,36 @@ fun compare ctxt modes terms =
           val patched = accepted t (retrieve t);
           val stock = accepted t (maps (fn net => Item_Net.retrieve net t) nets);
           val _ = visited := ! visited + 1;
-          val _ = if FAP_Entries.same patched stock then () else differing := t :: ! differing;
+          val _ =
+            if eq_list FAP_Entries.eq_item (patched, stock) then ()
+            else differing := t :: ! differing;
         in
           (case stock of [] => NONE | item :: _ => Option.map #1 (Pattern.match_rew thy t item))
         end;
       val _ = List.app (ignore o contract ctxt match_abbrev) terms;
     in (! visited, rev (! differing)) end) ();
 
-fun check_corpora thy =
-  FAP_Entries.corpora thy |> List.app (fn (label, corpus) =>
-    let
-      val (visited, differing) =
-        compare (FAP_Entries.context_of corpus) (#modes corpus) (#terms corpus);
-    in
-      if null differing then
-        writeln ("candidates " ^ label ^ ": " ^ string_of_int visited ^ " objects agree")
-      else
-        error ("candidates " ^ label ^ ": the lists differ at " ^
-          string_of_int (length differing) ^ " of " ^ string_of_int visited ^ " objects, first " ^
-          ML_Syntax.print_term (hd differing))
-    end);
+(*every registered corpus; the counts go to <tests dir>/out/<results>*)
+fun check_corpora thy results =
+  (case FAP_Entries.corpora thy of
+    [] => error "candidates: no corpus registered"
+  | corpora =>
+      let
+        val checked =
+          corpora |> map (fn (label, corpus) =>
+            let
+              val (visited, differing) =
+                compare (FAP_Entries.context_of corpus) (#modes corpus) (#terms corpus);
+              val n = string_of_int visited;
+            in
+              if null differing then (true, label ^ ": " ^ n ^ " objects agree")
+              else
+                (false, label ^ ": the lists differ at " ^ string_of_int (length differing) ^
+                  " of " ^ n ^ " objects, first " ^ ML_Syntax.print_term (hd differing))
+            end);
+        val _ = FAP_Entries.write_results thy results (map #2 checked);
+        val failures = map #2 (filter_out #1 checked);
+      in if null failures then () else error ("candidates:\n" ^ cat_lines failures) end);
 
 end;
 \<close>

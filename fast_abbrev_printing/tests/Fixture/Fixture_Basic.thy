@@ -55,7 +55,8 @@ let
   val special =
    [(Proof_Context.set_mode Proof_Context.mode_abbrev ctxt, ("abbreviation mode", guarded)),
     (Config.put Proof_Context.show_abbrevs false ctxt, ("show_abbrevs off", guarded)),
-    (ctxt, ("ill-typed", Const (\<^const_name>\<open>nt\<close>, \<^typ>\<open>b \<Rightarrow> b\<close>) $ \<^term>\<open>c\<close>))];
+    (*ill-typed at nt, which wants b; without the guard gl c would contract to late*)
+    (ctxt, ("ill-typed", \<^term>\<open>nt\<close> $ #2 late_object))];
   val lines =
     FAP_Fixture.dump ctxt "Fixture_Basic" (basic_objects @ [late_object]) @ [late_before] @
       map (fn (ctxt', obj) => FAP_Entries.term_entry {text = true} ctxt' FAP_Fixture.modes obj)
