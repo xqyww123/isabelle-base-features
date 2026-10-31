@@ -1,0 +1,30 @@
+[submodule "worktrees/Isabelle2025-2-expose_foreign"]
+	path = worktrees/Isabelle2025-2-expose_foreign
+	url = https://github.com/xqyww123/isabelle-patched.git
+	branch = Isabelle2025-2/expose_foreign
+	base = Isabelle2025-2/pristine
+	ignore = all
+[submodule "worktrees/Isabelle2025-2-expose_foreign-stock"]
+	path = worktrees/Isabelle2025-2-expose_foreign-stock
+	url = https://github.com/xqyww123/isabelle-patched.git
+	ignore = all
+[submodule "worktrees/Isabelle2025-2-future_assign_interrupt"]
+	path = worktrees/Isabelle2025-2-future_assign_interrupt
+	url = https://github.com/xqyww123/isabelle-patched.git
+	branch = Isabelle2025-2/future_assign_interrupt
+	base = Isabelle2025-2/expose_foreign
+	ignore = all
+[submodule "worktrees/Isabelle2025-2-future_assign_interrupt-stock"]
+	path = worktrees/Isabelle2025-2-future_assign_interrupt-stock
+	url = https://github.com/xqyww123/isabelle-patched.git
+	ignore = all
+[submodule "worktrees/Isabelle2025-2-fast_abbrev_printing"]
+	path = worktrees/Isabelle2025-2-fast_abbrev_printing
+	url = https://github.com/xqyww123/isabelle-patched.git
+	branch = Isabelle2025-2/fast_abbrev_printing
+	base = Isabelle2025-2/future_assign_interrupt
+	ignore = all
+[submodule "worktrees/Isabelle2025-2-fast_abbrev_printing-stock"]
+	path = worktrees/Isabelle2025-2-fast_abbrev_printing-stock
+	url = https://github.com/xqyww123/isabelle-patched.git
+	ignore = all
