@@ -28,3 +28,13 @@
 	path = worktrees/Isabelle2025-2-fast_abbrev_printing-stock
 	url = https://github.com/xqyww123/isabelle-patched.git
 	ignore = all
+[submodule "worktrees/Isabelle2026-fast_abbrev_printing"]
+	path = worktrees/Isabelle2026-fast_abbrev_printing
+	url = https://github.com/xqyww123/isabelle-patched.git
+	branch = Isabelle2026/fast_abbrev_printing
+	base = Isabelle2026/pristine
+	ignore = all
+[submodule "worktrees/Isabelle2026-fast_abbrev_printing-stock"]
+	path = worktrees/Isabelle2026-fast_abbrev_printing-stock
+	url = https://github.com/xqyww123/isabelle-patched.git
+	ignore = all
