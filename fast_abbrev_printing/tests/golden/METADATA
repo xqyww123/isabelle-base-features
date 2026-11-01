@@ -1,9 +1,9 @@
-recorded: 2026-10-29T19:20:49+08:00
-tree: /home/qiyuan/Current/MLML/contrib/Isabelle2025-2-fast_abbrev_printing-stock (ISABELLE_IDENTIFIER=Isabelle2025-2-fast_abbrev_printing-stock)
-commit: 6d8be012750564db449c3394528f7d1f6a2a737f (future_assign_interrupt: the patch tool's future_assign_interrupt/future.ML.patch)
+recorded: 2026-11-01T21:16:28+08:00
+tree: /home/qiyuan/Current/MLML/contrib/isabelle-base-features/worktrees/Isabelle2026-fast_abbrev_printing-stock (ISABELLE_IDENTIFIER=Isabelle2026-fast_abbrev_printing-stock)
+commit: 7d475f7eb114856c35fe83f89d86afa97317f239 (Isabelle2026 pristine: the official release (Isabelle2026_linux.tar.gz, ISABELLE_ID 096842708b28) minus its build products, plus .gitignore)
 git status: empty
 sha256:
-  8859556430f783d04572e90a0e64b6c80e6452c973587707c928d45b8cb9c044  ./breadth_locales.golden
+  62ff1ea9fde21f2159e6764b2b11f4c27bd71e49bfd8827f153193c6e1089074  ./breadth_locales.golden
   ee251ab20999caba84cdcdf066fe0990c87e7e877fc3097451218d524b46d388  ./breadth_theories.golden
   862c7dfcdbb68c7b68478369632501c18460414b62d2df2453ef29f661662747  ./fixture_basic.golden
   a40805476c3a64628ecb9e072248ad9c7a61cad44761278d14f1f449404d2ff4  ./fixture_lambda.golden

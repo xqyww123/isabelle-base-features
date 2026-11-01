@@ -63,8 +63,8 @@ fun indexed (name, [th]) = [(name, th)]
 fun new_facts prev facts = Facts.dest_static false prev facts |> sort_by #1 |> maps indexed;
 
 (*every fact first stated in an ancestor theory whose long name has the prefix, by theory then by
-  name.  Ancestors, not Thy_Info: theories loaded in the running session are not registered there
-  yet*)
+  name.  Ancestors, not Build.get_theory: theories loaded in the running session are not
+  registered there yet*)
 fun facts_of thy prefix =
   Theory.ancestors_of thy
   |> filter (String.isPrefix prefix o Context.theory_long_name)

@@ -22,7 +22,7 @@ structure FAP_Golden = Golden(val feature = "fast_abbrev_printing");
 structure FAP_Entries =
 struct
 
-fun digest s = SHA1.rep (SHA1.digest s);
+fun digest s = Message_Digest.rep (SHA1.digest s);
 val term_digest = digest o ML_Syntax.print_term;
 val one_line = translate_string (fn "\n" => " " | c => c);
 
@@ -108,7 +108,7 @@ val corpora = Symtab.dest o Corpora.get;
 fun context_at thy loc =
   if loc = "" then Proof_Context.init_global thy else Named_Target.init [] loc thy;
 
-fun context_of ({thy, loc, ...}: corpus) = context_at (Thy_Info.get_theory thy) loc;
+fun context_of ({thy, loc, ...}: corpus) = context_at (Build.get_theory thy) loc;
 
 end;
 \<close>

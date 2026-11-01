@@ -11,7 +11,8 @@ text \<open>Pure's copy of iNet is Performant_Isabelle_ML's \<open>library/impro
 
 ML \<open>
 let
-  val sha1 = SHA1.rep (SHA1.digest (File.read (Path.explode "~~/src/Pure/improved_net.ML")));
+  val sha1 =
+    Message_Digest.rep (SHA1.digest (File.read (Path.explode "~~/src/Pure/improved_net.ML")));
   val pinned = "89c746402f8034a4ced4aa0054fc32ebfed95cff";
 in
   if sha1 = pinned then ()
