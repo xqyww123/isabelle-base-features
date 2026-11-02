@@ -1,6 +1,7 @@
 # fast_abbrev_printing: the cause and the fix
 
-A speed fix, not a capability: with it Isabelle prints exactly the same text, sooner.
+A speed fix, not a capability: with it Isabelle prints exactly the same text, sooner. Every figure
+below was measured on Isabelle2025-2; the code this patch changes is the same in Isabelle2026.
 
 ## The cause
 
@@ -9,7 +10,7 @@ When Isabelle prints a term, its `uncheck` phase runs `Proof_Context.contract_ab
 abbreviation back into the abbreviation. It uses the context's reverted abbreviations: the rules
 from an abbreviation's expansion back to the abbreviation, kept per print mode in `Consts`. For
 each subterm it retrieves candidates among them and tries them in order with `Pattern.match_rew`;
-the first that matches is used. Isabelle2025-2 retrieves by unification (`Item_Net.retrieve`; the
+the first that matches is used. Stock Isabelle retrieves by unification (`Item_Net.retrieve`; the
 matching retrieval would be `Item_Net.retrieve_matching`):
 
 ```sml
@@ -47,7 +48,7 @@ none.
   The new `Consts.retrieve_abbrevs`, with the name and type of Isabelle2024's, returns a
   subterm's matching candidates, mode by mode in the order given. `Consts.revert_abbrevs` keeps
   its type and returns copies as `Item_Net`s with the same content, for its other caller in the
-  distribution (`src/HOL/Library/Time_Commands.ML`) and any other code.
+  distribution (the theory `HOL-Library.Time_Commands`) and any other code.
 - `src/Pure/Isar/proof_context.ML`: `contract_abbrevs` retrieves through
   `Consts.retrieve_abbrevs`.
 - `src/Pure/ROOT.ML`: loads `improved_net.ML` after `envir.ML` (iNet normalises with `Envir`) and
@@ -102,7 +103,7 @@ Isabelle without this package.
 
 ## Measurements
 
-Contraction in AFP locale contexts on stock Isabelle2025-2, with an `Item_iNet` built in ML beside
+Contraction in AFP locale contexts on stock Isabelle, with an `Item_iNet` built in ML beside
 a stock `Item_Net` of the same content; 1,259–1,430 statements each, wall ms, one run each:
 
 | locale (AFP entry) | stock | patched |

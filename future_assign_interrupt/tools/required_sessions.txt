@@ -1,2 +1,2 @@
-# The sessions a tested build of future_assign_interrupt must have covered (make-patches gate (e)).
+# The sessions to build before releasing future_assign_interrupt.
 Pure

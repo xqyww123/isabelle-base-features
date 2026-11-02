@@ -1,4 +1,4 @@
-# The sessions a tested build of fast_abbrev_printing must have covered (make-patches gate (e)).
+# The sessions to build before releasing fast_abbrev_printing.
 Pure
 HOL
 HOL-Algebra
