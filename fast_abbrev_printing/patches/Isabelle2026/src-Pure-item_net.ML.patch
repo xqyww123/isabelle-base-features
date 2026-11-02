@@ -1,0 +1,22 @@
+diff --git a/src/Pure/item_net.ML b/src/Pure/item_net.ML
+index d4b5f18..78409b7 100644
+--- a/src/Pure/item_net.ML
++++ b/src/Pure/item_net.ML
+@@ -22,7 +22,7 @@ sig
+   val filter: ('a -> bool) -> 'a T -> 'a T
+ end;
+ 
+-structure Item_Net: ITEM_NET =
++functor Item_Net(Net: NET): ITEM_NET =
+ struct
+ 
+ (* datatype *)
+@@ -81,3 +81,8 @@ fun filter pred items =
+   fold (fn x => not (pred x) ? remove x) (content items) items;
+ 
+ end;
++
++structure Item_Net = Item_Net(Net);
++
++(*retrieval as stated in the header of improved_net.ML*)
++structure Item_iNet = Item_Net(iNet);

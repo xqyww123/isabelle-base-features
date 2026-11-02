@@ -1,0 +1,59 @@
+diff --git a/src/Pure/consts.ML b/src/Pure/consts.ML
+index f823ab7..c1ee321 100644
+--- a/src/Pure/consts.ML
++++ b/src/Pure/consts.ML
+@@ -12,6 +12,7 @@ sig
+   val change_base: bool -> T -> T
+   val change_ignore: T -> T
+   val revert_abbrevs: T -> string list -> (term * term) Item_Net.T list
++  val retrieve_abbrevs: T -> string list -> term -> (term * term) list
+   val dest: T ->
+    {const_space: Name_Space.T,
+     constants: (string * (typ * term option)) list,
+@@ -55,7 +56,7 @@ type abbrev = {rhs: term, normal_rhs: term, internal: bool};
+ datatype T = Consts of
+  {decls: (decl * abbrev option) Name_Space.table,
+   constraints: typ Symtab.table,
+-  rev_abbrevs: (term * term) Item_Net.T Symtab.table};
++  rev_abbrevs: (term * term) Item_iNet.T Symtab.table};
+ 
+ fun eq_consts
+    (Consts {decls = decls1, constraints = constraints1, rev_abbrevs = rev_abbrevs1},
+@@ -79,14 +80,24 @@ val change_ignore = map_consts (fn (decls, constraints, rev_abbrevs) =>
+ 
+ (* reverted abbrevs *)
+ 
+-val empty_abbrevs =
+-  Item_Net.init (fn ((t, u), (t', u')) => t aconv t' andalso u aconv u') (single o #1);
++fun eq_rev_abbrev ((t, u), (t', u')) = t aconv t' andalso u aconv u';
++val index_rev_abbrev = single o #1;
++
++val empty_abbrevs = Item_iNet.init eq_rev_abbrev index_rev_abbrev;
+ 
+ fun update_abbrevs mode abbrs =
+-  Symtab.map_default (mode, empty_abbrevs) (Item_Net.update abbrs);
++  Symtab.map_default (mode, empty_abbrevs) (Item_iNet.update abbrs);
+ 
++(*copies on Item_Net, with the same content*)
+ fun revert_abbrevs (Consts {rev_abbrevs, ...}) modes =
+-  map_filter (Symtab.lookup rev_abbrevs) modes;
++  map_filter (Symtab.lookup rev_abbrevs) modes
++  |> map (fn net =>
++    fold_rev Item_Net.update (Item_iNet.content net)
++      (Item_Net.init eq_rev_abbrev index_rev_abbrev));
++
++fun retrieve_abbrevs (Consts {rev_abbrevs, ...}) modes =
++  let val nets = map_filter (Symtab.lookup rev_abbrevs) modes
++  in fn t => maps (fn net => Item_iNet.retrieve_matching net t) nets end;
+ 
+ 
+ (* dest consts *)
+@@ -366,7 +377,7 @@ fun merge
+   let
+     val decls' = Name_Space.merge_tables (decls1, decls2);
+     val constraints' = Symtab.merge (K true) (constraints1, constraints2);
+-    val rev_abbrevs' = Symtab.join (K Item_Net.merge) (rev_abbrevs1, rev_abbrevs2);
++    val rev_abbrevs' = Symtab.join (K Item_iNet.merge) (rev_abbrevs1, rev_abbrevs2);
+   in make_consts (decls', constraints', rev_abbrevs') end;
+ 
+ end;

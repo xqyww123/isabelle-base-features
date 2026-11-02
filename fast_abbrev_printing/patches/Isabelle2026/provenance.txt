@@ -1,0 +1,6 @@
+feature: Isabelle2026/fast_abbrev_printing
+release_tag: Isabelle2026/fast_abbrev_printing/1
+commit: b62eb9f018c3e188edd7244ed478d1998a9512ad
+base_tag: Isabelle2026/bicompose_rename_fix/1
+base_commit: 0d86a471e9c53098c5a1ba09fd74428c662db0e7
+build_string_prefix: Isabelle2026
