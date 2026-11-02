@@ -32,7 +32,7 @@
 	path = worktrees/Isabelle2026-fast_abbrev_printing
 	url = https://github.com/xqyww123/isabelle-patched.git
 	branch = Isabelle2026/fast_abbrev_printing
-	base = Isabelle2026/pristine
+	base = Isabelle2026/bicompose_rename_fix
 	ignore = all
 [submodule "worktrees/Isabelle2026-fast_abbrev_printing-stock"]
 	path = worktrees/Isabelle2026-fast_abbrev_printing-stock
