@@ -67,7 +67,7 @@ let
     "ratio: stock route " ^ Real.fmt (StringCvt.FIX (SOME 2)) (t_stock * 1000.0) ^ " ms, patched " ^
     Real.fmt (StringCvt.FIX (SOME 2)) (t_patched * 1000.0) ^ " ms, " ^
     Real.fmt (StringCvt.FIX (SOME 1)) ratio ^ " times";
-  val _ = FAP_Entries.write_results \<^theory> "ratio.txt" [msg];
+  val _ = FAP_Entries.write_results \<^theory> "ratio" [msg];
 in if ratio >= ratio_min then () else error (msg ^ ", below " ^ Real.toString ratio_min) end
 \<close>
 

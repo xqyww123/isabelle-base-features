@@ -58,7 +58,7 @@ fun compare ctxt modes terms =
       val _ = List.app (ignore o contract ctxt match_abbrev) terms;
     in (! visited, rev (! differing)) end) ();
 
-(*every registered corpus; the counts go to <tests dir>/out/<results>*)
+(*every registered corpus; the counts go to <tests dir>/out/<results>.txt*)
 fun check_corpora thy results =
   (case FAP_Entries.corpora thy of
     [] => error "candidates: no corpus registered"

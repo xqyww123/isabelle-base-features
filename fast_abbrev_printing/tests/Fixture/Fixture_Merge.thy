@@ -10,7 +10,7 @@ ML \<open>val merge_objects = [("across a theory merge", \<^term>\<open>gm cm dm
 setup \<open>FAP_Fixture.register "Fixture_Merge" "" merge_objects\<close>
 
 ML \<open>
-FAP_Golden.check \<^theory> "fixture_merge.golden"
+FAP_Golden.check \<^theory> "fixture_merge"
   (cat_lines (FAP_Fixture.dump \<^context> "Fixture_Merge" merge_objects) ^ "\n")
 \<close>
 

@@ -73,7 +73,6 @@ val aT = TFree ("'a", []);
 fun c name T = Const (name, T);
 fun v name T = Var ((name, 0), T);
 fun all T = c "fall" ((T --> nT) --> nT);
-fun itself T = Const ("Pure.type", Type ("itself", [T]));
 fun lstT T = Type ("lst", [T]);
 
 (*pattern, object: the object is an instance of the pattern up to beta-eta*)
@@ -96,16 +95,16 @@ val retrieved =
         (v "F" (nT --> nT) $ Bound 0)),
     c "g" (nT --> nT --> nT) $ c "z" nT),
   ("TYPE, schematic",
-    c "tf" (Term.itselfT nT --> lstT nT --> nT) $ itself (TVar (("'a", 0), [])) $
+    c "tf" (Term.itselfT nT --> lstT nT --> nT) $ Logic.mk_type (TVar (("'a", 0), [])) $
       (c "rv" (lstT nT --> lstT nT) $ v "xs" (lstT nT)),
-    c "tf" (Term.itselfT nT --> lstT nT --> nT) $ itself nT $
+    c "tf" (Term.itselfT nT --> lstT nT --> nT) $ Logic.mk_type nT $
       (c "rv" (lstT nT --> lstT nT) $ Free ("xs", lstT nT)))];
 
 (*pattern, object: no instance of the pattern is the object*)
 val not_retrieved =
  [("TYPE, other type",
-    c "tf" (Term.itselfT nT --> lstT nT --> nT) $ itself nT $ v "xs" (lstT nT),
-    c "tf" (Term.itselfT aT --> lstT aT --> nT) $ itself aT $ Free ("ys", lstT aT)),
+    c "tf" (Term.itselfT nT --> lstT nT --> nT) $ Logic.mk_type nT $ v "xs" (lstT nT),
+    c "tf" (Term.itselfT aT --> lstT aT --> nT) $ Logic.mk_type aT $ Free ("ys", lstT aT)),
   ("lambda bodies",
     all nT $ Abs ("x", nT, c "f2" (nT --> nT --> nT) $ Bound 0 $ Bound 0),
     all nT $ Abs ("x", nT, c "f1" (nT --> nT --> nT) $ Bound 0 $ Bound 0))];

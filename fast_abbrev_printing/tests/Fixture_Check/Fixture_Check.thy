@@ -11,8 +11,7 @@ text \<open>Pure's copy of iNet is Performant_Isabelle_ML's \<open>library/impro
 
 ML \<open>
 let
-  val sha1 =
-    Message_Digest.rep (SHA1.digest (File.read (Path.explode "~~/src/Pure/improved_net.ML")));
+  val sha1 = FAP_Entries.digest (File.read (Path.explode "~~/src/Pure/improved_net.ML"));
   val pinned = "89c746402f8034a4ced4aa0054fc32ebfed95cff";
 in
   if sha1 = pinned then ()
@@ -26,7 +25,7 @@ ML \<open>
 | msgs => error ("iNet regression:\n" ^ cat_lines msgs))
 \<close>
 
-ML \<open>FAP_Candidates.check_corpora \<^theory> "fixture_candidates.txt"\<close>
+ML \<open>FAP_Candidates.check_corpora \<^theory> "fixture_candidates"\<close>
 
 text \<open>The discrimination assertion: at \<open>\<And>x. f_1 x x\<close>, \<^ML>\<open>Consts.retrieve_abbrevs\<close> tells the
   three lambda patterns apart; stock unification retrieval returns all three.\<close>

@@ -42,12 +42,12 @@ fun show_mode "" = "\"\""
 (*exceptions are part of the behaviour; their messages may carry source positions*)
 fun attempt f = \<^try>\<open>f () catch exn => "EXN " ^ General.exnName exn\<close>;
 
-(*a check's results, for reading after a batch build: <tests dir>/out/<name>; a failed build can
-  leave an earlier run's file*)
+(*a check's results, for reading after a batch build: <tests dir>/out/<name>.txt; a failed build
+  can leave an earlier run's file*)
 fun write_results thy name lines =
   let val dir = Path.append (Resources.master_directory thy) (Path.explode "../out") in
     Isabelle_System.make_directory dir;
-    File.write (Path.append dir (Path.basic name)) (cat_lines lines ^ "\n")
+    File.write (Path.append dir (Path.basic (name ^ ".txt"))) (cat_lines lines ^ "\n")
   end;
 
 
@@ -69,8 +69,7 @@ fun content_entries label ctxt modes =
   listed_modes modes |> maps (fn m =>
     let val items = (case container ctxt m of SOME net => Item_Net.content net | NONE => []) in
       ("# content " ^ label ^ " mode=" ^ show_mode m ^ " count=" ^ string_of_int (length items)) ::
-        map_index (fn (i, (pat, lhs)) =>
-          string_of_int i ^ "  " ^ term_digest pat ^ "  " ^ term_digest lhs) items
+        map (fn (pat, lhs) => term_digest pat ^ "  " ^ term_digest lhs) items
     end);
 
 fun retrieval_entries label ctxt modes probes =

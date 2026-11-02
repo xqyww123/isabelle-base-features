@@ -1,9 +1,10 @@
 theory Breadth
   imports
-    "HOL-Algebra.Galois_Connection" "HOL-Algebra.FiniteProduct" "HOL-Algebra.Sylow"
-    "HOL-Algebra.Bij" "HOL-Algebra.Multiplicative_Group" "HOL-Algebra.Zassenhaus"
-    "HOL-Algebra.Divisibility" "HOL-Algebra.IntRing" "HOL-Algebra.UnivPoly"
-    "HOL-Algebra.Algebraic_Closure_Type" "HOL-Algebra.Algebra"
+    "HOL-Algebra.README" "HOL-Algebra.Galois_Connection" "HOL-Algebra.FiniteProduct"
+    "HOL-Algebra.Sylow" "HOL-Algebra.Bij" "HOL-Algebra.Multiplicative_Group"
+    "HOL-Algebra.Zassenhaus" "HOL-Algebra.Divisibility" "HOL-Algebra.IntRing"
+    "HOL-Algebra.UnivPoly" "HOL-Algebra.Algebraic_Closure_Type" "HOL-Algebra.Residues_Algebra"
+    "HOL-Algebra.Algebra"
     Fast_Abbrev_Printing_Fixture.Entries
 begin
 
@@ -11,7 +12,16 @@ text \<open>Every named fact of HOL-Algebra, printed in the context of the theor
   the facts of locale and class contexts, printed there; each in the default print mode and in
   \<open>iff\<close>, the one other print mode with a container in HOL contexts.  Content entries for the
   last theory and for each locale and class context.  The imports are the session's top theories,
-  so that every HOL-Algebra theory is an ancestor.\<close>
+  so that every HOL-Algebra theory is an ancestor; the first check below enforces it.\<close>
+
+ML \<open>
+(case filter (String.isPrefix "HOL-Algebra.") (Build.all_theories ()) of
+  [] => error "Breadth: the build knows no HOL-Algebra theory"
+| names =>
+    (case filter_out (fn name => Context.subthy (Build.get_theory name, \<^theory>)) names of
+      [] => ()
+    | missing => error ("Breadth: HOL-Algebra theories not imported: " ^ commas_quote missing)))
+\<close>
 
 ML \<open>
 structure FAP_Breadth =
@@ -24,9 +34,10 @@ fun mode_label [] = "default"
   | mode_label (m :: _) = m;
 
 val locales =
-  ["Group.monoid", "Group.group", "Group.comm_group", "Ring.abelian_monoid", "Ring.ring",
-   "UnivPoly.UP_pre_univ_prop", "Orderings.linorder", "Lattices.lattice",
-   "Fields.linordered_field"];
+  [\<^locale>\<open>Group.monoid\<close>, \<^locale>\<open>Group.group\<close>, \<^locale>\<open>Group.comm_group\<close>,
+   \<^locale>\<open>Ring.abelian_monoid\<close>, \<^locale>\<open>Ring.ring\<close>, \<^locale>\<open>UnivPoly.UP_pre_univ_prop\<close>,
+   \<^locale>\<open>Orderings.linorder\<close>, \<^locale>\<open>Lattices.lattice\<close>,
+   \<^locale>\<open>Fields.linordered_field\<close>];
 
 fun fact_lines ctxt (name, th) =
   print_modes |> map (fn modes =>
@@ -78,8 +89,8 @@ end;
 setup \<open>FAP_Breadth.register\<close>
 
 ML \<open>
-FAP_Golden.check \<^theory> "breadth_theories.golden" (FAP_Breadth.theories_dump \<^theory>);
-FAP_Golden.check \<^theory> "breadth_locales.golden" (FAP_Breadth.locales_dump \<^theory>);
+FAP_Golden.check \<^theory> "breadth_theories" (FAP_Breadth.theories_dump \<^theory>);
+FAP_Golden.check \<^theory> "breadth_locales" (FAP_Breadth.locales_dump \<^theory>);
 \<close>
 
 end

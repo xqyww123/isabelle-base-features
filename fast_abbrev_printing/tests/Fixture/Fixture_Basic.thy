@@ -61,7 +61,7 @@ let
     FAP_Fixture.dump ctxt "Fixture_Basic" (basic_objects @ [late_object]) @ [late_before] @
       map (fn (ctxt', obj) => FAP_Entries.term_entry {text = true} ctxt' FAP_Fixture.modes obj)
         special;
-in FAP_Golden.check \<^theory> "fixture_basic.golden" (cat_lines lines ^ "\n") end
+in FAP_Golden.check \<^theory> "fixture_basic" (cat_lines lines ^ "\n") end
 \<close>
 
 end

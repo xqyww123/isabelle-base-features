@@ -1,9 +1,9 @@
 (*  Byte-for-byte reference output for the tests of a feature package.
 
     The tree decides the mode: on the feature's stock tree, whose ISABELLE_IDENTIFIER ends with
-    -<feature>-stock, a check records <golden dir>/<name>; on any other tree it compares and, on a
-    mismatch, writes <name>.actual next to the reference and fails.  The golden directory is
-    ../golden, seen from the directory of the theory that checks.
+    -<feature>-stock, a check records <golden dir>/<name>.golden; on any other tree it compares and,
+    on a mismatch, writes <name>.golden.actual next to the reference and fails.  The golden
+    directory is ../golden, seen from the directory of the theory that checks.
 *)
 
 signature GOLDEN =
@@ -40,18 +40,19 @@ fun first_difference expected actual =
 fun check thy name text =
   let
     val dir = golden_dir thy;
-    val path = Path.append dir (Path.basic name);
+    val file = name ^ ".golden";
+    val path = Path.append dir (Path.basic file);
   in
     if recording then
       (Isabelle_System.make_directory dir; File.write path text;
-       writeln ("recorded golden " ^ name ^ " (" ^ string_of_int (size text) ^ " bytes)"))
+       writeln ("recorded golden " ^ file ^ " (" ^ string_of_int (size text) ^ " bytes)"))
     else
       let val expected = File.read path in
-        if expected = text then writeln ("golden " ^ name ^ " matches")
+        if expected = text then writeln ("golden " ^ file ^ " matches")
         else
-          (File.write (Path.append dir (Path.basic (name ^ ".actual"))) text;
-           error ("golden " ^ name ^ " differs at " ^ first_difference expected text ^
-             "\n  actual output written next to it as " ^ name ^ ".actual"))
+          (File.write (Path.append dir (Path.basic (file ^ ".actual"))) text;
+           error ("golden " ^ file ^ " differs at " ^ first_difference expected text ^
+             "\n  actual output written next to it as " ^ file ^ ".actual"))
       end
   end;
 

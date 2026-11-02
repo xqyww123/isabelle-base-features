@@ -53,7 +53,7 @@ let
   val lines =
     FAP_Fixture.dump ctxt "Fixture_Order" order_objects @
       FAP_Fixture.dump lctxt \<^locale>\<open>ord_l\<close> order_locale_objects;
-in FAP_Golden.check \<^theory> "fixture_order.golden" (cat_lines lines ^ "\n") end
+in FAP_Golden.check \<^theory> "fixture_order" (cat_lines lines ^ "\n") end
 \<close>
 
 end

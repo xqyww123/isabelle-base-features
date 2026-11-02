@@ -40,7 +40,7 @@ let
   val lines =
     FAP_Fixture.dump ctxt "Fixture_Lambda" lambda_objects @
       FAP_Entries.retrieval_entries "Fixture_Lambda" ctxt FAP_Fixture.modes lambda_probes;
-in FAP_Golden.check \<^theory> "fixture_lambda.golden" (cat_lines lines ^ "\n") end
+in FAP_Golden.check \<^theory> "fixture_lambda" (cat_lines lines ^ "\n") end
 \<close>
 
 end

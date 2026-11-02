@@ -20,11 +20,11 @@ let
             Pure_iNet_Regression.replay (Item_Net.content net)
             |> map (fn msg => label ^ " mode=" ^ FAP_Entries.show_mode m ^ ": " ^ msg))));
   val _ =
-    FAP_Entries.write_results \<^theory> "breadth_replay.txt"
+    FAP_Entries.write_results \<^theory> "breadth_replay"
       (if null failures then ["replay: pass"] else failures);
 in if null failures then () else error ("replay:\n" ^ cat_lines failures) end
 \<close>
 
-ML \<open>FAP_Candidates.check_corpora \<^theory> "breadth_candidates.txt"\<close>
+ML \<open>FAP_Candidates.check_corpora \<^theory> "breadth_candidates"\<close>
 
 end
