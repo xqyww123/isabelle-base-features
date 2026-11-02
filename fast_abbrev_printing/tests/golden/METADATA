@@ -1,6 +1,6 @@
-recorded: 2026-11-02T10:13:04+08:00
+recorded: 2026-11-02T13:02:33+08:00
 tree: /home/qiyuan/Current/MLML/contrib/isabelle-base-features/worktrees/Isabelle2026-fast_abbrev_printing-stock (ISABELLE_IDENTIFIER=Isabelle2026-fast_abbrev_printing-stock)
-commit: 7d475f7eb114856c35fe83f89d86afa97317f239 (Isabelle2026 pristine: the official release (Isabelle2026_linux.tar.gz, ISABELLE_ID 096842708b28) minus its build products, plus .gitignore)
+commit: 0d86a471e9c53098c5a1ba09fd74428c662db0e7 (bicompose_rename_fix: rename unknowns consistently in newAs)
 git status: empty
 sha256:
   5f87a41a4114a6b3cb784edf6d87a446e8706b6823c3fffab1ea3aeff6fa6ab3  ./breadth_locales.golden
